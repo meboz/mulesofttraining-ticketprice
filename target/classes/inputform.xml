@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
     <flow name="inputformFlow1" doc:name="inputformFlow1">
         <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8088" doc:name="HTTP" path="tickets"/>
-        <async doc:name="Async">
-            <object-to-string-transformer doc:name="Object to String"/>
-            <logger message="#[message.payload]" level="INFO" doc:name="Log payload"/>
-            <logger message="#[message.inboundProperties['http.method']]" level="INFO" doc:name="Log  method"/>
-        </async>
-        <parse-template location="src/main/resources/index.html" doc:name="Parse Template"/>
-        <http:response-builder contentType="text/html" doc:name="HTTP Response Builder"/>
+        <logger level="INFO" doc:name="Logger"/>
+        <choice doc:name="Choice">
+            <when expression="#[message.inboundProperties['http.method'] == 'GET']">
+                <parse-template location="src/main/resources/index.html" doc:name="NewPriceRequest"/>
+                <http:response-builder contentType="text/html" doc:name="HTTP Response Builder"/>
+            </when>
+            <when expression="#[message.inboundProperties['http.method'] == 'POST']">
+                <flow-ref name="United" doc:name="GetAvailablePrices"/>
+                <http:response-builder doc:name="HTTP Response Builder"/>
+            </when>
+        </choice>
+
     </flow>
 </mule>

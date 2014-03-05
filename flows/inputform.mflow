@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="inputform">
-    <flow SubFlow="false" name="inputformFlow1" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="9739e844-384d-40e9-9ff4-0a07441c1909">
+    <flow SubFlow="false" name="inputformFlow1" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="08f56092-0e39-49d7-a8e6-e47b981fb5e9">
         <properties>
             <property name="initialState"/>
             <property name="processingStrategy2"/>
@@ -12,7 +12,7 @@
         <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
             <graphicalData x="0" y="0" width="0" height="0"/>
             <endpoint direction="Inbound" message-exchange-pattern="RequestResponse" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#1">
-                <graphicalData x="21" y="76" width="68" height="194"/>
+                <graphicalData x="21" y="138" width="68" height="278"/>
                 <properties>
                     <property name="port" value="8088"/>
                     <property name="host" value="localhost"/>
@@ -40,58 +40,92 @@
                     <property name="connector-ref"/>
                 </properties>
             </endpoint>
-            <scope name="Async" type="http://www.mulesoft.org/schema/mule/core/async" entity-id="6ed62d74-b388-401f-8395-10dbcc897d05">
-                <graphicalData x="149" y="52" width="264" height="116"/>
-                <compartment entity-id="72bc9f93-cbd7-44c3-9e99-049066df0fca">
-                    <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="23f2fdee-3d69-406f-85f9-6f5b506682ba">
-                        <pattern name="Object to String" type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" entity-id="e1584e7b-6551-44e4-922a-71f156135ef0">
-                            <graphicalData x="163" y="76" width="97" height="69"/>
+            <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="c6df0c64-431a-4782-a9ad-b10336c4d4bf">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+            </pattern>
+            <splitter index="0" name="Choice" type="org.mule.tooling.ui.modules.core.pattern.cbr" entity-id="46f4e970-12f6-4370-b646-f02a8ea43c81">
+                <graphicalData x="149" y="31" width="470" height="283"/>
+                <properties>
+                    <property name="updated"/>
+                    <property name=";INDEX" value="0"/>
+                    <property name="tracking:enable-default-events" value="false"/>
+                    <property-collection name="7361c2b8-3a7d-460f-83d1-722fc8a5b5bd">
+                        <property name="choice.expression" value="#[message.inboundProperties['http.method'] == 'GET']"/>
+                    </property-collection>
+                    <property-collection name="36413205-0506-46e3-a6e2-59e031619bb8">
+                        <property name="choice.expression" value="#[message.inboundProperties['http.method'] == 'POST']"/>
+                    </property-collection>
+                </properties>
+                <description></description>
+                <pattern name="Choice" type="org.mule.tooling.ui.modules.core.pattern.cbr" entity-id="36519094-bb41-4097-8a6b-acf3ea0fefbd">
+                    <properties>
+                        <property name="updated"/>
+                        <property name=";INDEX" value="0"/>
+                        <property name="tracking:enable-default-events" value="false"/>
+                        <property-collection name="7361c2b8-3a7d-460f-83d1-722fc8a5b5bd">
+                            <property name="choice.expression" value="#[message.inboundProperties['http.method'] == 'GET']"/>
+                        </property-collection>
+                        <property-collection name="36413205-0506-46e3-a6e2-59e031619bb8">
+                            <property name="choice.expression" value="#[message.inboundProperties['http.method'] == 'POST']"/>
+                        </property-collection>
+                    </properties>
+                </pattern>
+                <compartment entity-id="f8a2af2e-ae6c-47bc-a694-3ca6761183a8">
+                    <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="7361c2b8-3a7d-460f-83d1-722fc8a5b5bd">
+                        <pattern name="NewPriceRequest" type="http://www.mulesoft.org/schema/mule/core/parse-template" entity-id="Parse Template#1">
+                            <graphicalData x="297" y="45" width="95" height="69"/>
                             <properties>
-<property name="auxiliary;moved-from"/>
+<property name="auxiliary;moved-from" value="7"/>
+<property name="location" value="src/main/resources/index.html"/>
                             </properties>
                             <description></description>
                         </pattern>
-                        <pattern name="Log payload" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#1">
-                            <graphicalData x="320" y="76" width="79" height="69"/>
-                            <properties>
-<property name="message" value="#[message.payload]"/>
-<property name="category" value=""/>
-<property name="level" value="INFO"/>
-<property name="auxiliary;moved-from" value="4"/>
-<property name="updated"/>
-                            </properties>
-                            <description></description>
-                        </pattern>
-                        <pattern name="Log  method" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#2">
+                        <pattern name="HTTP Response Builder" type="http://www.mulesoft.org/schema/mule/http/response-builder" entity-id="HTTP Response Builder#1">
                             <graphicalData x="0" y="0" width="0" height="0"/>
                             <properties>
-<property name="message" value="#[message.inboundProperties['http.method']]"/>
-<property name="category" value=""/>
-<property name="level" value="INFO"/>
-<property name="auxiliary;moved-from" value="5"/>
+<property name="cookiesLabel" value=""/>
 <property name="updated"/>
+<property name="status" value=""/>
+<property name="contentType" value="text/html"/>
+<property name="auxiliary;erased;status" value="true"/>
+<property-collection name="@http://www.mulesoft.org/schema/mule/http/cache-control;2125271256">
+    <property name="mustRevalidate" value="false"/>
+    <property name="noCache" value="false"/>
+    <property name="maxAge" value=""/>
+    <property name="noStore" value="false"/>
+    <property name="auxiliary;erased;maxAge" value="true"/>
+    <property name="directive" value=""/>
+    <property name="auxiliary;erased;directive" value="true"/>
+    <property name="isProcessed$$$$ " value="true"/>
+</property-collection>
+<property-collection name="@http://www.mulesoft.org/schema/mule/http/expires;338499041">
+    <property name="value" value=""/>
+    <property name="isProcessed$$$$ " value="true"/>
+</property-collection>
+<property-collection name="@http://www.mulesoft.org/schema/mule/http/location;469201184">
+    <property name="value" value=""/>
+    <property name="isProcessed$$$$ " value="true"/>
+</property-collection>
                             </properties>
                             <description></description>
                         </pattern>
                     </lane>
+                    <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="true" entity-id="9dab0ce0-a30b-49c5-94cb-aeff4031e4c9"/>
+                    <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="36413205-0506-46e3-a6e2-59e031619bb8">
+                        <pattern name="GetAvailablePrices" type="http://www.mulesoft.org/schema/mule/core/flow-ref" entity-id="e63a3e90-b789-4b89-ba47-777d229738be">
+                            <graphicalData x="299" y="130" width="94" height="69"/>
+                            <properties>
+<property name="updated"/>
+<property name="name" value="ticketpriceFlow1"/>
+                            </properties>
+                            <description></description>
+                        </pattern>
+                        <pattern name="HTTP Response Builder" type="http://www.mulesoft.org/schema/mule/http/response-builder" entity-id="20b78266-0359-4fb1-9886-39de1fbcb830">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                        </pattern>
+                    </lane>
                 </compartment>
-            </scope>
-            <pattern name="Parse Template" type="http://www.mulesoft.org/schema/mule/core/parse-template" entity-id="Parse Template#1">
-                <graphicalData x="615" y="76" width="95" height="69"/>
-                <properties>
-                    <property name="location" value="src/main/resources/index.html"/>
-                    <property name="auxiliary;index" value="6"/>
-                </properties>
-            </pattern>
-            <pattern name="HTTP Response Builder" type="http://www.mulesoft.org/schema/mule/http/response-builder" entity-id="HTTP Response Builder#1">
-                <graphicalData x="770" y="76" width="137" height="69"/>
-                <properties>
-                    <property name="cookiesLabel"/>
-                    <property name="status"/>
-                    <property name="contentType" value="text/html"/>
-                    <property name="auxiliary;index" value="7"/>
-                </properties>
-            </pattern>
+            </splitter>
         </lane>
     </flow>
     <description></description>
