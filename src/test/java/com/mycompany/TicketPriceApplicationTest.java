@@ -11,7 +11,7 @@ import org.mule.api.MuleMessage;
 import org.mule.api.client.MuleClient;
 import org.mule.tck.junit4.FunctionalTestCase;
 
-public class TicketPriceApplicationTests extends FunctionalTestCase {
+public class TicketPriceApplicationTest extends FunctionalTestCase {
 
 	@Test
 	public void testHttp() throws Exception {
@@ -20,10 +20,10 @@ public class TicketPriceApplicationTests extends FunctionalTestCase {
 		
 		headers.put("http.method", "GET");
 		
-		MuleMessage response = client.send("http://localhost:8081/byron/SFO", "",headers,100000);
+		MuleMessage response = client.send("http://localhost:8081/SFO", "",headers,100000);
 			
 		String result = response.getPayloadAsString();
-		assertEquals("300 Delta",result);
+		assertEquals("[300 Delta, 300 American, 300 United]",result);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.mulesoft.training;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -12,7 +13,7 @@ import com.mulesoft.training.pricing.PriceOffer;
 import com.mulesoft.training.pricing.PriceRequest;
 import com.mulesoft.training.pricing.PriceResponse;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+
 
 public class PrepareResponse implements Callable {
 

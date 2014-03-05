@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="ticketprice">
-    <flow SubFlow="false" name="ticketpriceFlow1" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="a8a33bb3-3f42-478d-9ab8-faa98d6cbeac">
+    <flow SubFlow="false" name="ticketpriceFlow1" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="6713359b-7ec4-4c5f-a5e2-ea54f37944b6">
         <properties>
             <property name="initialState"/>
             <property name="processingStrategy2"/>
@@ -12,24 +12,25 @@
         <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
             <graphicalData x="0" y="0" width="0" height="0"/>
             <endpoint direction="Inbound" message-exchange-pattern="RequestResponse" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#1">
-                <graphicalData x="0" y="0" width="0" height="0"/>
+                <graphicalData x="21" y="138" width="68" height="278"/>
                 <properties>
                     <property name="port" value="8081"/>
                     <property name="auxiliary;erased;mimeType" value="true"/>
                     <property name="contentType" value=""/>
                     <property name="password" value=""/>
-                    <property name="tracking:enable-default-events" value="false"/>
                     <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events" value="false"/>
                     <property name="updated"/>
                     <property name="auxiliary;erased;encoding" value="true"/>
-                    <property name="path" value="byron"/>
                     <property name="encoding" value=""/>
+                    <property name="path" value=""/>
                     <property name="responseTransformer-refs" value=""/>
                     <property name="auxiliary;index" value="2"/>
                     <property name="mimeType" value=""/>
                     <property name="responseTimeout" value="10000"/>
                     <property name="auxiliary;erased;contentType" value="true"/>
                     <property name="host" value="localhost"/>
+                    <property name="auxiliary;erased;path" value="true"/>
                     <property name="businessEventsLabel" value=""/>
                     <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
                     <property name="keep-alive" value="false"/>
@@ -43,11 +44,74 @@
                 </properties>
                 <description></description>
             </endpoint>
-            <pattern name="Java" type="http://www.mulesoft.org/schema/mule/core/component" entity-id="Java#1">
+            <splitter index="3" name="All" type="org.mule.tooling.ui.modules.core.pattern.all" entity-id="All#1">
+                <graphicalData x="149" y="31" width="254" height="283"/>
+                <properties>
+                    <property name="bussinessEventsLabel"/>
+                    <property name=";INDEX" value="3"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="auxiliary;index" value="3"/>
+                </properties>
+                <pattern name="All" type="org.mule.tooling.ui.modules.core.pattern.all" entity-id="All#2">
+                    <properties>
+                        <property name="bussinessEventsLabel"/>
+                        <property name=";INDEX" value="3"/>
+                        <property name="tracking:enable-default-events"/>
+                        <property name="auxiliary;index" value="3"/>
+                    </properties>
+                </pattern>
+                <compartment entity-id="compartment#1">
+                    <lane hadOnlyOneElement="true" index="0" isChoiceOtherwiseLane="false" entity-id="21a92696-69f6-4113-9a9d-7f1a78799c7a">
+                        <pattern name="Call Delta" type="http://www.mulesoft.org/schema/mule/core/flow-ref" entity-id="Flow Reference#1">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="name" value="Delta"/>
+<property name="auxiliary;index" value="4"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                    <lane hadOnlyOneElement="true" index="0" isChoiceOtherwiseLane="false" entity-id="3ad8bb3d-5801-4b8e-8a69-c616c614a29b">
+                        <pattern name="Call American" type="http://www.mulesoft.org/schema/mule/core/flow-ref" entity-id="Flow Reference#2">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="name" value="American"/>
+<property name="auxiliary;index" value="5"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                    <lane hadOnlyOneElement="true" index="0" isChoiceOtherwiseLane="false" entity-id="927162ae-7806-43ec-a4f6-69462080e05b">
+                        <pattern name="Call United" type="http://www.mulesoft.org/schema/mule/core/flow-ref" entity-id="Flow Reference#3">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="name" value="United"/>
+<property name="auxiliary;index" value="6"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                </compartment>
+            </splitter>
+            <pattern name="Object to String" type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" entity-id="ab05d7ff-edf2-4ec3-a9b9-3144921a3da9">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <description></description>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="Delta" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="8d3f9bd0-af35-4fb2-b9a7-f147a2a4849c">
+        <properties>
+            <property name="initialState"/>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="7"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#2">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <pattern name="Delta" type="http://www.mulesoft.org/schema/mule/core/component" entity-id="Java#1">
                 <graphicalData x="0" y="0" width="0" height="0"/>
                 <properties>
                     <property name="class" value="com.mulesoft.training.pricing.PriceComponent"/>
-                    <property name="auxiliary;index" value="3"/>
+                    <property name="auxiliary;index" value="8"/>
                 </properties>
             </pattern>
             <pattern name="Append String" type="http://www.mulesoft.org/schema/mule/core/append-string-transformer" entity-id="Append String#1">
@@ -57,8 +121,70 @@
                     <property name="returnClass"/>
                     <property name="ignoreBadInput"/>
                     <property name="encoding"/>
-                    <property name="auxiliary;index" value="4"/>
                     <property name="mimeType"/>
+                    <property name="auxiliary;index" value="9"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="American" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="98c998d7-3695-4818-87aa-6c72fcecbc0d">
+        <properties>
+            <property name="initialState"/>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="10"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#3">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <pattern name="American" type="http://www.mulesoft.org/schema/mule/core/component" entity-id="Java#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="class" value="com.mulesoft.training.pricing.PriceComponent"/>
+                    <property name="auxiliary;index" value="11"/>
+                </properties>
+            </pattern>
+            <pattern name="Append String" type="http://www.mulesoft.org/schema/mule/core/append-string-transformer" entity-id="Append String#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="message" value=" American"/>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="12"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="United" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="42673689-8929-41fa-befa-3610b84b60d1">
+        <properties>
+            <property name="initialState"/>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="13"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#4">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <pattern name="United" type="http://www.mulesoft.org/schema/mule/core/component" entity-id="Java#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="class" value="com.mulesoft.training.pricing.PriceComponent"/>
+                    <property name="auxiliary;index" value="14"/>
+                </properties>
+            </pattern>
+            <pattern name="Append String" type="http://www.mulesoft.org/schema/mule/core/append-string-transformer" entity-id="Append String#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="message" value=" United"/>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="15"/>
                 </properties>
             </pattern>
         </lane>
