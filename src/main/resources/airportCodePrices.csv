@@ -1,0 +1,4 @@
+DestinationCode,OriginCode,FlightCost,Tax
+SFO,YYZ,111,10
+LAX,YYZ,222,20
+FOO,BAR,333,22
