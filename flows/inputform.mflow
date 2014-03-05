@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="inputform">
-    <flow SubFlow="false" name="inputformFlow1" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="a3fc7456-d50b-48be-9bd8-e140fae20a2b">
+    <flow SubFlow="false" name="inputformFlow1" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="9739e844-384d-40e9-9ff4-0a07441c1909">
         <properties>
             <property name="initialState"/>
             <property name="processingStrategy2"/>
@@ -12,74 +12,85 @@
         <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
             <graphicalData x="0" y="0" width="0" height="0"/>
             <endpoint direction="Inbound" message-exchange-pattern="RequestResponse" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#1">
-                <graphicalData x="21" y="111" width="68" height="171"/>
+                <graphicalData x="21" y="76" width="68" height="194"/>
                 <properties>
-                    <property name="auxiliary;erased;mimeType" value="true"/>
                     <property name="port" value="8088"/>
-                    <property name="contentType" value=""/>
-                    <property name="password" value=""/>
-                    <property name="exchange-pattern" value="request-response"/>
-                    <property name="tracking:enable-default-events" value="false"/>
-                    <property name="updated"/>
-                    <property name="auxiliary;erased;encoding" value="true"/>
-                    <property name="path" value="tickets"/>
-                    <property name="encoding" value=""/>
-                    <property name="responseTransformer-refs" value=""/>
-                    <property name="auxiliary;index" value="2"/>
-                    <property name="responseTimeout" value="10000"/>
-                    <property name="mimeType" value=""/>
-                    <property name="auxiliary;erased;contentType" value="true"/>
                     <property name="host" value="localhost"/>
-                    <property name="businessEventsLabel" value=""/>
+                    <property name="businessEventsLabel"/>
+                    <property name="followRedirects"/>
                     <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
-                    <property name="keep-alive" value="false"/>
-                    <property name="disableTransportTransformer" value="false"/>
-                    <property name="ref" value=""/>
-                    <property name="httpLabel" value=""/>
-                    <property name="transformer-refs" value=""/>
-                    <property name="address" value=""/>
-                    <property name="user" value=""/>
-                    <property name="connector-ref" value=""/>
+                    <property name="keep-alive"/>
+                    <property name="contentType"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="password"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="httpLabel"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="path" value="tickets"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="method"/>
+                    <property name="user"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="auxiliary;index" value="2"/>
+                    <property name="connector-ref"/>
                 </properties>
-                <description></description>
             </endpoint>
+            <scope name="Async" type="http://www.mulesoft.org/schema/mule/core/async" entity-id="6ed62d74-b388-401f-8395-10dbcc897d05">
+                <graphicalData x="149" y="52" width="264" height="116"/>
+                <compartment entity-id="72bc9f93-cbd7-44c3-9e99-049066df0fca">
+                    <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="23f2fdee-3d69-406f-85f9-6f5b506682ba">
+                        <pattern name="Object to String" type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" entity-id="e1584e7b-6551-44e4-922a-71f156135ef0">
+                            <graphicalData x="163" y="76" width="97" height="69"/>
+                            <properties>
+<property name="auxiliary;moved-from"/>
+                            </properties>
+                            <description></description>
+                        </pattern>
+                        <pattern name="Log payload" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#1">
+                            <graphicalData x="320" y="76" width="79" height="69"/>
+                            <properties>
+<property name="message" value="#[message.payload]"/>
+<property name="category" value=""/>
+<property name="level" value="INFO"/>
+<property name="auxiliary;moved-from" value="4"/>
+<property name="updated"/>
+                            </properties>
+                            <description></description>
+                        </pattern>
+                        <pattern name="Log  method" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#2">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="message" value="#[message.inboundProperties['http.method']]"/>
+<property name="category" value=""/>
+<property name="level" value="INFO"/>
+<property name="auxiliary;moved-from" value="5"/>
+<property name="updated"/>
+                            </properties>
+                            <description></description>
+                        </pattern>
+                    </lane>
+                </compartment>
+            </scope>
             <pattern name="Parse Template" type="http://www.mulesoft.org/schema/mule/core/parse-template" entity-id="Parse Template#1">
-                <graphicalData x="149" y="111" width="95" height="69"/>
+                <graphicalData x="615" y="76" width="95" height="69"/>
                 <properties>
-                    <property name="updated"/>
                     <property name="location" value="src/main/resources/index.html"/>
-                    <property name="auxiliary;index" value="3"/>
+                    <property name="auxiliary;index" value="6"/>
                 </properties>
-                <description></description>
             </pattern>
-            <pattern name="HTTP Response Builder" type="http://www.mulesoft.org/schema/mule/http/response-builder" entity-id="dad347dd-5cf9-4f18-b077-02190c91a7c1">
-                <graphicalData x="0" y="0" width="0" height="0"/>
+            <pattern name="HTTP Response Builder" type="http://www.mulesoft.org/schema/mule/http/response-builder" entity-id="HTTP Response Builder#1">
+                <graphicalData x="770" y="76" width="137" height="69"/>
                 <properties>
-                    <property name="cookiesLabel" value=""/>
-                    <property name="updated"/>
-                    <property name="status" value=""/>
+                    <property name="cookiesLabel"/>
+                    <property name="status"/>
                     <property name="contentType" value="text/html"/>
-                    <property name="auxiliary;erased;status" value="true"/>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/http/cache-control;1516319914">
-                        <property name="mustRevalidate" value="false"/>
-                        <property name="noCache" value="false"/>
-                        <property name="maxAge" value=""/>
-                        <property name="noStore" value="false"/>
-                        <property name="auxiliary;erased;maxAge" value="true"/>
-                        <property name="directive" value=""/>
-                        <property name="auxiliary;erased;directive" value="true"/>
-                        <property name="isProcessed$$$$ " value="true"/>
-                    </property-collection>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/http/expires;600355649">
-                        <property name="value" value=""/>
-                        <property name="isProcessed$$$$ " value="true"/>
-                    </property-collection>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/http/location;1299219137">
-                        <property name="value" value=""/>
-                        <property name="isProcessed$$$$ " value="true"/>
-                    </property-collection>
+                    <property name="auxiliary;index" value="7"/>
                 </properties>
-                <description></description>
             </pattern>
         </lane>
     </flow>

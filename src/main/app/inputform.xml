@@ -5,6 +5,11 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
     <flow name="inputformFlow1" doc:name="inputformFlow1">
         <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8088" doc:name="HTTP" path="tickets"/>
+        <async doc:name="Async">
+            <object-to-string-transformer doc:name="Object to String"/>
+            <logger message="#[message.payload]" level="INFO" doc:name="Log payload"/>
+            <logger message="#[message.inboundProperties['http.method']]" level="INFO" doc:name="Log  method"/>
+        </async>
         <parse-template location="src/main/resources/index.html" doc:name="Parse Template"/>
         <http:response-builder contentType="text/html" doc:name="HTTP Response Builder"/>
     </flow>
