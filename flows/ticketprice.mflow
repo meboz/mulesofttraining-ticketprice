@@ -7,19 +7,106 @@
             <property name="transformationGraphPath" value="json_to_pojo.grf"/>
         </properties>
     </global-element>
-    <flow SubFlow="false" name="ticketpriceFlow1" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="09f5cc71-47de-4669-8d04-43217647bdcc">
+    <global-element name="Active MQ" type="org.mule.tooling.ui.modules.core.global.activemq.config" entity-id="Active MQ#1">
+        <properties>
+            <property name="jndiProviderUrl"/>
+            <property name="embeddedMode"/>
+            <property name="redeliveryHandlerFactory-ref"/>
+            <property name="connectionFactory-ref"/>
+            <property name="maxRedelivery"/>
+            <property name="durable"/>
+            <property name="password"/>
+            <property name="username"/>
+            <property name="name" value="Active_MQ"/>
+            <property name="dynamicNotification"/>
+            <property name="noLocal"/>
+            <property name="auxiliary;index" value="2"/>
+            <property name="eagerConsumer"/>
+            <property name="numberOfConsumers"/>
+            <property name="acknowledgementMode"/>
+            <property name="jndiInitialFactory"/>
+            <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/jms/activemq-connector"/>
+            <property name="validateConnections" value="true"/>
+            <property name="disableTemporaryReplyToDestinations"/>
+            <property name="clientId"/>
+            <property name="dispatcherPoolFactory-ref"/>
+            <property name="persistentDelivery"/>
+            <property name="forceJndiDestinations"/>
+            <property name="connectionFactoryJndiName"/>
+            <property name="brokerURL" value="vm://localhost"/>
+            <property name="specification" value="1.1"/>
+            <property name="jndiDestinations"/>
+            <property name="honorQosHeaders"/>
+            <property name="cacheJmsSessions"/>
+            <property name="jndiProviderProperties-ref"/>
+        </properties>
+    </global-element>
+    <global-element name="Bean" type="http://www.springframework.org/schema/beans/bean" entity-id="Bean#1">
+        <properties>
+            <property name="factory-bean"/>
+            <property name="abstract"/>
+            <property name="scope"/>
+            <property name="init-method"/>
+            <property name="autowire-candidate"/>
+            <property name="factory-method"/>
+            <property name="class" value="com.mulesoft.training.DBInitialization"/>
+            <property name="parent"/>
+            <property name="children"/>
+            <property name="lazy-init"/>
+            <property name="auxiliary;wrappedIn" value="beans@spring@http://www.springframework.org/schema/beans"/>
+            <property name="id" value="DBInitBean"/>
+            <property name="name" value="DBInit"/>
+            <property name="primary"/>
+            <property name="autowire"/>
+            <property name="destroy-method"/>
+            <property name="auxiliary;wrapIn" value="3"/>
+            <property name="auxiliary;index" value="4"/>
+            <property name="depends-on"/>
+        </properties>
+    </global-element>
+    <global-element name="Derby Data Source" type="http://www.mulesoft.org/schema/mule/ee/jdbc/derby-data-source" entity-id="Derby Data Source#1">
+        <properties>
+            <property name="name" value="Derby_Data_Source"/>
+            <property name="loginTimeout"/>
+            <property name="transactionIsolation" value="UNSPECIFIED"/>
+            <property name="create"/>
+            <property name="password" value=""/>
+            <property name="user"/>
+            <property name="auxiliary;index" value="5"/>
+            <property name="database"/>
+            <property name="url" value="jdbc:derby:memory:muleEmbeddedDB;create=true"/>
+        </properties>
+    </global-element>
+    <global-element name="Database" type="http://www.mulesoft.org/schema/mule/ee/jdbc/connector" entity-id="Database#1">
+        <properties>
+            <property name="handleOutputResultSets"/>
+            <property name="dispatcherPoolFactory-ref"/>
+            <property name="transactionPerMessage"/>
+            <property name="resultSetHandler-ref"/>
+            <property name="dataSource-ref to Bean" value="Derby_Data_Source"/>
+            <property name="pollingFrequency" value="0"/>
+            <property name="queryTimeout" value="-1"/>
+            <property name="name" value="Database"/>
+            <property name="validateConnections" value="true"/>
+            <property name="dynamicNotification"/>
+            <property name="queryRunner-ref"/>
+            <property name="auxiliary;index" value="6"/>
+            <property name="dataSource-ref to JDBC DataSource" value="Derby_Data_Source"/>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="ticketpriceFlow1" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="d4b34456-d884-4f69-b783-339cf962c116">
         <properties>
             <property name="initialState"/>
             <property name="processingStrategy2"/>
             <property name="processingStrategy"/>
             <property name="bussinessEventsLabel"/>
             <property name="tracking:enable-default-events"/>
-            <property name="auxiliary;index" value="2"/>
+            <property name="auxiliary;index" value="7"/>
         </properties>
         <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
             <graphicalData x="0" y="0" width="0" height="0"/>
             <pattern name="JSON To Pojo" type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" entity-id="DataMapper#2">
-                <graphicalData x="21" y="93" width="86" height="69"/>
+                <graphicalData x="0" y="0" width="0" height="0"/>
                 <properties>
                     <property name="returnClass"/>
                     <property name="stream"/>
@@ -27,99 +114,408 @@
                     <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/ee/data-mapper/transform"/>
                     <property name="pipeSize"/>
                     <property name="config-ref" value="json_to_pojo"/>
-                    <property name="auxiliary;index" value="3"/>
+                    <property name="auxiliary;index" value="8"/>
                 </properties>
             </pattern>
-            <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="797ff050-18d6-4efa-b776-b97dcd8e0a8a">
+            <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#1">
                 <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="message"/>
+                    <property name="category"/>
+                    <property name="level" value="INFO"/>
+                    <property name="auxiliary;index" value="9"/>
+                </properties>
             </pattern>
-            <splitter index="4" name="All" type="org.mule.tooling.ui.modules.core.pattern.all" entity-id="All#1">
-                <graphicalData x="167" y="31" width="238" height="193"/>
+            <splitter index="10" name="All" type="org.mule.tooling.ui.modules.core.pattern.all" entity-id="All#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
                 <properties>
                     <property name="bussinessEventsLabel"/>
-                    <property name=";INDEX" value="4"/>
-                    <property name="auxiliary;index" value="4"/>
+                    <property name=";INDEX" value="10"/>
+                    <property name="auxiliary;index" value="10"/>
                     <property name="tracking:enable-default-events"/>
                 </properties>
+                <description></description>
                 <pattern name="All" type="org.mule.tooling.ui.modules.core.pattern.all" entity-id="All#2">
                     <properties>
                         <property name="bussinessEventsLabel"/>
-                        <property name=";INDEX" value="4"/>
-                        <property name="auxiliary;index" value="4"/>
+                        <property name=";INDEX" value="10"/>
+                        <property name="auxiliary;index" value="10"/>
                         <property name="tracking:enable-default-events"/>
                     </properties>
                 </pattern>
                 <compartment entity-id="compartment#1">
-                    <lane hadOnlyOneElement="true" index="0" isChoiceOtherwiseLane="false" entity-id="e0358cdf-fc4d-4db4-bfcb-b0ca1f5d2cc8">
-                        <pattern name="Call Delta" type="http://www.mulesoft.org/schema/mule/core/flow-ref" entity-id="Flow Reference#1">
+                    <lane hadOnlyOneElement="true" index="0" isChoiceOtherwiseLane="false" entity-id="123a441f-d64e-42b8-a9ad-3250cccf28d5">
+                        <pattern name="Fetch Delta Price Offering" type="http://www.mulesoft.org/schema/mule/core/flow-ref" entity-id="Flow Reference#1">
                             <graphicalData x="0" y="0" width="0" height="0"/>
                             <properties>
-<property name="name" value="Delta"/>
-<property name="auxiliary;index" value="5"/>
+<property name="name" value="DeltaServer"/>
+<property name="auxiliary;index" value="11"/>
                             </properties>
                         </pattern>
                     </lane>
-                    <lane hadOnlyOneElement="true" index="0" isChoiceOtherwiseLane="false" entity-id="a6ecf1f7-5ab1-48cc-8e63-b322ac83dac8">
-                        <pattern name="Call United" type="http://www.mulesoft.org/schema/mule/core/flow-ref" entity-id="Flow Reference#2">
+                    <lane hadOnlyOneElement="true" index="0" isChoiceOtherwiseLane="false" entity-id="c546037b-ff08-4f17-82a4-5337b8ef62b0">
+                        <pattern name="Fetch United Price Offering" type="http://www.mulesoft.org/schema/mule/core/flow-ref" entity-id="Flow Reference#2">
                             <graphicalData x="0" y="0" width="0" height="0"/>
                             <properties>
-<property name="name" value="United"/>
-<property name="auxiliary;index" value="6"/>
+<property name="name" value="UnitedClient"/>
+<property name="auxiliary;index" value="12"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                    <lane hadOnlyOneElement="true" index="0" isChoiceOtherwiseLane="false" entity-id="96519b45-1537-45ea-84a8-c7d8424e4f78">
+                        <pattern name="Fetch British Airways Offering" type="http://www.mulesoft.org/schema/mule/core/flow-ref" entity-id="Flow Reference#3">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="name" value="BritishAirwaysServer"/>
+<property name="auxiliary;index" value="13"/>
                             </properties>
                         </pattern>
                     </lane>
                 </compartment>
             </splitter>
+            <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="message"/>
+                    <property name="category"/>
+                    <property name="level" value="INFO"/>
+                    <property name="auxiliary;index" value="14"/>
+                </properties>
+            </pattern>
             <pattern name="Object to JSON" type="http://www.mulesoft.org/schema/mule/json/object-to-json-transformer" entity-id="Object to JSON#1">
-                <graphicalData x="465" y="93" width="94" height="69"/>
+                <graphicalData x="0" y="0" width="0" height="0"/>
                 <properties>
                     <property name="sourceClass"/>
                     <property name="returnClass"/>
                     <property name="ignoreBadInput"/>
                     <property name="encoding"/>
                     <property name="mapper-ref"/>
-                    <property name="auxiliary;index" value="7"/>
+                    <property name="auxiliary;index" value="15"/>
                     <property name="mimeType"/>
                 </properties>
             </pattern>
         </lane>
     </flow>
-    <flow SubFlow="false" name="Delta" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="08f28f22-f0cb-49b2-aced-297620c9f56d">
+    <flow SubFlow="false" name="BritishAirwaysServer" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="ded2427c-c04f-4178-af1d-5d1ce0657f76">
+        <properties>
+            <property name="processingStrategy2" value=""/>
+            <property name="initialState" value=""/>
+            <property name="auxiliary;erased;initialState" value="true"/>
+            <property name="bussinessEventsLabel" value=""/>
+            <property name="tracking:enable-default-events" value="false"/>
+            <property name="auxiliary;erased;processingStrategy2" value="true"/>
+            <property name="auxiliary;index" value="16"/>
+            <property name="updated"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/ee/tracking/transaction;1692349138">
+                <property name="id" value=""/>
+                <property name="isProcessed$$$$ " value="true"/>
+            </property-collection>
+        </properties>
+        <description></description>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#2">
+            <graphicalData x="14" y="382" width="426" height="85"/>
+            <endpoint direction="Outbound" message-exchange-pattern="OneWay" name="BritishAirwaysDB" type="http://www.mulesoft.org/schema/mule/ee/jdbc/endpoint" entity-id="Database#2">
+                <graphicalData x="21" y="382" width="103" height="69"/>
+                <properties>
+                    <property name="" value=""/>
+                    <property name="auxiliary;erased;mimeType" value="true"/>
+                    <property name="businessEventsLabel" value=""/>
+                    <property name="queryTimeout" value="-1"/>
+                    <property name="disableTransportTransformer" value="false"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="queryKey" value="selectPrice"/>
+                    <property name="tracking:enable-default-events" value="false"/>
+                    <property name="ref" value=""/>
+                    <property name="transformer-refs" value=""/>
+                    <property name="updated"/>
+                    <property name="address" value=""/>
+                    <property name="auxiliary;erased;encoding" value="true"/>
+                    <property name="encoding" value=""/>
+                    <property name="responseTransformer-refs" value=""/>
+                    <property name="mimeType" value=""/>
+                    <property name="auxiliary;erased;responseTimeout" value="true"/>
+                    <property name="responseTimeout" value=""/>
+                    <property name="auxiliary;index" value="17"/>
+                    <property name="connector-ref" value="Database"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/ee/jdbc/query;0">
+                        <property name="value" value="select * from ticket_price where origin = #[message.payload.origin] and destination = #[message.payload.destination]"/>
+                        <property name="isProcessed$$$$ " value="true"/>
+                        <property name="auxiliary;wrapIn" value="18"/>
+                        <property name="auxiliary;index" value="18"/>
+                        <property name="key" value="selectPrice"/>
+                    </property-collection>
+                </properties>
+                <description></description>
+            </endpoint>
+            <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#3">
+                <graphicalData x="184" y="382" width="68" height="69"/>
+                <properties>
+                    <property name="message"/>
+                    <property name="category"/>
+                    <property name="level" value="INFO"/>
+                    <property name="auxiliary;index" value="19"/>
+                </properties>
+            </pattern>
+            <scope name="Catch Exception Strategy" type="http://www.mulesoft.org/schema/mule/core/catch-exception-strategy" entity-id="ac1fde57-1cef-4290-9efb-0516ff388bb0">
+                <description></description>
+                <compartment entity-id="8ae1b339-eeb6-45b2-a331-b12723940a80">
+                    <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="0fa70654-5b6f-4952-a461-9af8a25c0261">
+                        <pattern name="Expression" type="http://www.mulesoft.org/schema/mule/core/expression-transformer" entity-id="f21a5cf2-2337-460c-afc9-61e5a4d1caad">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="expression" value="#[new com.mulesoft.training.pricing.PriceOffer('BritishArways',0)]"/>
+<property name="auxiliary;erased;mimeType" value="true"/>
+<property name="returnClass" value=""/>
+<property name="ignoreBadInput" value="false"/>
+<property name="returnSourceIfNull" value="false"/>
+<property name="updated"/>
+<property name="auxiliary;erased;encoding" value="true"/>
+<property name="encoding" value=""/>
+<property name="mimeType" value=""/>
+                            </properties>
+                            <description></description>
+                        </pattern>
+                    </lane>
+                </compartment>
+            </scope>
+            <pattern name="Convert row to offer" type="http://www.mulesoft.org/schema/mule/core/expression-transformer" entity-id="Expression#1">
+                <graphicalData x="312" y="382" width="121" height="69"/>
+                <properties>
+                    <property name="expression" value="#[new com.mulesoft.training.pricing.PriceOffer('BritishAirways',payload[0]['price'])]"/>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="returnSourceIfNull"/>
+                    <property name="name"/>
+                    <property name="custom-evaluator"/>
+                    <property name="encoding"/>
+                    <property name="evaluator"/>
+                    <property name="auxiliary;index" value="20"/>
+                    <property name="mimeType"/>
+                </properties>
+                <description></description>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="DeltaServer" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="63189577-d4d2-4062-9bbd-070fd8821a2f">
         <properties>
             <property name="initialState"/>
             <property name="processingStrategy2"/>
             <property name="processingStrategy"/>
             <property name="bussinessEventsLabel"/>
             <property name="tracking:enable-default-events"/>
-            <property name="auxiliary;index" value="8"/>
+            <property name="auxiliary;index" value="21"/>
         </properties>
-        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#2">
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#3">
             <graphicalData x="0" y="0" width="0" height="0"/>
-            <pattern name="Delta" type="http://www.mulesoft.org/schema/mule/core/component" entity-id="Java#1">
-                <graphicalData x="0" y="0" width="0" height="0"/>
+            <pattern name="Delta Price Offering" type="http://www.mulesoft.org/schema/mule/core/component" entity-id="Java#1">
+                <graphicalData x="21" y="535" width="117" height="69"/>
                 <properties>
                     <property name="class" value="com.mulesoft.training.pricing.PriceOfferingDelta"/>
-                    <property name="auxiliary;index" value="9"/>
+                    <property name="auxiliary;index" value="22"/>
+                </properties>
+            </pattern>
+            <scope name="Catch Exception Strategy" type="http://www.mulesoft.org/schema/mule/core/catch-exception-strategy" entity-id="c213cf66-0f18-42f5-af69-7e0975b87e93">
+                <description></description>
+                <compartment entity-id="a1e81e4c-80ce-4df1-8c26-46ded82d2a1f">
+                    <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="b41de0b6-22fe-44ea-b9b2-00f5280edd1b">
+                        <pattern name="No price found" type="http://www.mulesoft.org/schema/mule/core/expression-transformer" entity-id="48356d9b-f014-4536-8b12-a120ae22c60d">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="auxiliary;erased;mimeType" value="true"/>
+<property name="expression" value="#[new com.mulesoft.training.pricing.PriceOffer(&quot;Delta&quot;,0)]"/>
+<property name="returnClass" value=""/>
+<property name="ignoreBadInput" value="false"/>
+<property name="returnSourceIfNull" value="false"/>
+<property name="updated"/>
+<property name="auxiliary;erased;encoding" value="true"/>
+<property name="encoding" value=""/>
+<property name="mimeType" value=""/>
+                            </properties>
+                            <description></description>
+                        </pattern>
+                    </lane>
+                </compartment>
+            </scope>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="UnitedClient" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="2c02db41-48dc-4667-affd-a5012e38a54e">
+        <properties>
+            <property name="initialState"/>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="23"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#4">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <pattern name="Object to JSON" type="http://www.mulesoft.org/schema/mule/json/object-to-json-transformer" entity-id="Object to JSON#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="sourceClass"/>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mapper-ref"/>
+                    <property name="auxiliary;index" value="24"/>
+                    <property name="mimeType"/>
+                </properties>
+            </pattern>
+            <endpoint direction="Outbound" message-exchange-pattern="OneWay" name="JMS" type="http://www.mulesoft.org/schema/mule/jms/endpoint" entity-id="JMS#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="topic"/>
+                    <property name="queue" value="united.request"/>
+                    <property name="durableName"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="disableTemporaryReplyToDestinations"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="auxiliary;index" value="25"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="connector-ref"/>
+                </properties>
+                <description></description>
+            </endpoint>
+            <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#4">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="message" value="#[message.payload]"/>
+                    <property name="category"/>
+                    <property name="level" value="INFO"/>
+                    <property name="auxiliary;index" value="26"/>
+                </properties>
+            </pattern>
+            <pattern name="JSON to Object" type="http://www.mulesoft.org/schema/mule/json/json-to-object-transformer" entity-id="JSON to Object#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="returnClass" value="com.mulesoft.training.pricing.PriceOffer"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mapper-ref"/>
+                    <property name="auxiliary;index" value="27"/>
+                    <property name="mimeType"/>
                 </properties>
             </pattern>
         </lane>
     </flow>
-    <flow SubFlow="false" name="United" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="d7b4363a-c42f-4dfc-9cb6-c1cfd994eed0">
+    <flow SubFlow="false" name="UnitedServer" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="75d77127-f43b-4214-8d46-87872bc74a44">
         <properties>
-            <property name="initialState"/>
-            <property name="processingStrategy2"/>
-            <property name="processingStrategy"/>
-            <property name="bussinessEventsLabel"/>
-            <property name="tracking:enable-default-events"/>
-            <property name="auxiliary;index" value="10"/>
+            <property name="processingStrategy2" value=""/>
+            <property name="initialState" value=""/>
+            <property name="auxiliary;erased;initialState" value="true"/>
+            <property name="bussinessEventsLabel" value=""/>
+            <property name="tracking:enable-default-events" value="false"/>
+            <property name="auxiliary;erased;processingStrategy2" value="true"/>
+            <property name="auxiliary;index" value="28"/>
+            <property name="updated"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/ee/tracking/transaction;587788395">
+                <property name="id" value=""/>
+                <property name="isProcessed$$$$ " value="true"/>
+            </property-collection>
         </properties>
-        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#3">
+        <description></description>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#5">
             <graphicalData x="0" y="0" width="0" height="0"/>
-            <pattern name="United" type="http://www.mulesoft.org/schema/mule/core/component" entity-id="Java#2">
-                <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="OneWay" name="United JMS Endpoint" type="http://www.mulesoft.org/schema/mule/jms/endpoint" entity-id="JMS#2">
+                <graphicalData x="21" y="957" width="124" height="171"/>
+                <properties>
+                    <property name="topic"/>
+                    <property name="queue" value="united.request"/>
+                    <property name="durableName"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="disableTemporaryReplyToDestinations"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="auxiliary;index" value="29"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#5">
+                <graphicalData x="205" y="957" width="68" height="69"/>
+                <properties>
+                    <property name="message"/>
+                    <property name="category"/>
+                    <property name="level" value="INFO"/>
+                    <property name="auxiliary;index" value="30"/>
+                </properties>
+            </pattern>
+            <scope name="Catch Exception Strategy" type="http://www.mulesoft.org/schema/mule/core/catch-exception-strategy" entity-id="7379ee4e-5272-4abf-99fd-747da92f57ad">
+                <compartment entity-id="9ab02681-5823-48fb-9ed9-27dcf136bfde">
+                    <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="d99fa552-3f35-47bf-81cc-f6e02d4f1a9f">
+                        <pattern name="No price found" type="http://www.mulesoft.org/schema/mule/core/expression-transformer" entity-id="20f42839-7789-49a4-95af-f037ee522d8f">
+                            <graphicalData x="28" y="1174" width="94" height="69"/>
+                            <properties>
+<property name="expression" value="#[new com.mulesoft.training.pricing.PriceOffer(&quot;United&quot;,0)]"/>
+<property name="auxiliary;erased;mimeType" value="true"/>
+<property name="returnClass" value=""/>
+<property name="ignoreBadInput" value="false"/>
+<property name="returnSourceIfNull" value="false"/>
+<property name="updated"/>
+<property name="auxiliary;erased;encoding" value="true"/>
+<property name="encoding" value=""/>
+<property name="mimeType" value=""/>
+                            </properties>
+                            <description></description>
+                        </pattern>
+                        <pattern name="Object to JSON" type="http://www.mulesoft.org/schema/mule/json/object-to-json-transformer" entity-id="eeabd558-505b-46ad-907f-737ad69fcdc6">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                        </pattern>
+                    </lane>
+                </compartment>
+            </scope>
+            <pattern name="JSON to Object" type="http://www.mulesoft.org/schema/mule/json/json-to-object-transformer" entity-id="JSON to Object#2">
+                <graphicalData x="333" y="957" width="94" height="69"/>
+                <properties>
+                    <property name="returnClass" value="com.mulesoft.training.pricing.PriceRequest"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mapper-ref"/>
+                    <property name="auxiliary;index" value="31"/>
+                    <property name="mimeType"/>
+                </properties>
+            </pattern>
+            <pattern name="United Price Offering" type="http://www.mulesoft.org/schema/mule/core/component" entity-id="Java#2">
+                <graphicalData x="487" y="957" width="125" height="69"/>
                 <properties>
                     <property name="class" value="com.mulesoft.training.pricing.PriceOfferingUnited"/>
-                    <property name="auxiliary;index" value="11"/>
+                    <property name="auxiliary;index" value="32"/>
+                </properties>
+            </pattern>
+            <pattern name="Object to JSON" type="http://www.mulesoft.org/schema/mule/json/object-to-json-transformer" entity-id="Object to JSON#3">
+                <graphicalData x="672" y="957" width="94" height="69"/>
+                <properties>
+                    <property name="sourceClass"/>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mapper-ref"/>
+                    <property name="auxiliary;index" value="33"/>
+                    <property name="mimeType"/>
+                </properties>
+            </pattern>
+            <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#6">
+                <graphicalData x="826" y="957" width="68" height="69"/>
+                <properties>
+                    <property name="message"/>
+                    <property name="category"/>
+                    <property name="level" value="INFO"/>
+                    <property name="auxiliary;index" value="34"/>
                 </properties>
             </pattern>
         </lane>

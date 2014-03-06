@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+<mule xmlns:jdbc-ee="http://www.mulesoft.org/schema/mule/ee/jdbc" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.1"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
@@ -8,26 +8,64 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
 http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
-http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/ee/jdbc/current/mule-jdbc-ee.xsd">
     <data-mapper:config name="json_to_pojo" transformationGraphPath="json_to_pojo.grf" doc:name="json_to_pojo"/>
+    <jms:activemq-connector name="Active_MQ" specification="1.1" brokerURL="vm://localhost" validateConnections="true" doc:name="Active MQ"/>
+    <spring:beans>
+        <spring:bean id="DBInitBean" name="DBInit" class="com.mulesoft.training.DBInitialization"/>
+    </spring:beans>
+    <jdbc-ee:derby-data-source name="Derby_Data_Source" password="" url="jdbc:derby:memory:muleEmbeddedDB;create=true" transactionIsolation="UNSPECIFIED" doc:name="Derby Data Source"/>
+    <jdbc-ee:connector name="Database" dataSource-ref="Derby_Data_Source" validateConnections="true" queryTimeout="-1" pollingFrequency="0" doc:name="Database"/>
     <flow name="ticketpriceFlow1" doc:name="ticketpriceFlow1">
         <data-mapper:transform config-ref="json_to_pojo" doc:name="JSON To Pojo"/>
         <logger level="INFO" doc:name="Logger"/>
 
         <all doc:name="All">
-            <flow-ref name="Delta" doc:name="Call Delta"/>
+            <flow-ref name="DeltaServer" doc:name="Fetch Delta Price Offering"/>
+            <flow-ref name="UnitedClient" doc:name="Fetch United Price Offering"/>
+            <flow-ref name="BritishAirwaysServer" doc:name="Fetch British Airways Offering"/>
 
-            <flow-ref name="United" doc:name="Call United"/>
         </all>
+        <logger level="INFO" doc:name="Logger"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
 
     </flow>
-    <flow name="Delta" doc:name="Delta">
-        <component class="com.mulesoft.training.pricing.PriceOfferingDelta" doc:name="Delta"/>
+    <flow name="BritishAirwaysServer" doc:name="BritishAirwaysServer">
+        <jdbc-ee:outbound-endpoint  queryTimeout="-1"  doc:name="BritishAirwaysDB" connector-ref="Database" exchange-pattern="request-response" queryKey="selectPrice">
+            <jdbc-ee:query key="selectPrice" value="select * from ticket_price where origin = #[message.payload.origin] and destination = #[message.payload.destination]"/>
+        </jdbc-ee:outbound-endpoint>
+        <logger level="INFO" doc:name="Logger"/>
+        <expression-transformer expression="#[new com.mulesoft.training.pricing.PriceOffer('BritishAirways',payload[0]['price'])]" doc:name="Convert row to offer"/>
+        <catch-exception-strategy doc:name="Catch Exception Strategy">
+            <expression-transformer expression="#[new com.mulesoft.training.pricing.PriceOffer('BritishArways',0)]" doc:name="Expression"/>
+        </catch-exception-strategy>
+    </flow>
+    <flow name="DeltaServer" doc:name="DeltaServer">
+        <component class="com.mulesoft.training.pricing.PriceOfferingDelta" doc:name="Delta Price Offering"/>
+        <catch-exception-strategy doc:name="Catch Exception Strategy">
+            <expression-transformer expression="#[new com.mulesoft.training.pricing.PriceOffer(&quot;Delta&quot;,0)]" doc:name="No price found"/>
+        </catch-exception-strategy>
     </flow>
 
-     <flow name="United" doc:name="United">
-        <component class="com.mulesoft.training.pricing.PriceOfferingUnited" doc:name="United"/>
+     <flow name="UnitedClient" doc:name="UnitedClient">
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <jms:outbound-endpoint exchange-pattern="request-response" queue="united.request" doc:name="JMS"/>
+        <logger message="#[message.payload]" level="INFO" doc:name="Logger"/>
+        <json:json-to-object-transformer returnClass="com.mulesoft.training.pricing.PriceOffer" doc:name="JSON to Object"/>
 
+    </flow>
+    <flow name="UnitedServer" doc:name="UnitedServer">
+        <jms:inbound-endpoint exchange-pattern="request-response" queue="united.request" doc:name="United JMS Endpoint"/>
+        <logger level="INFO" doc:name="Logger"/>
+        <json:json-to-object-transformer returnClass="com.mulesoft.training.pricing.PriceRequest" doc:name="JSON to Object"/>
+        <component class="com.mulesoft.training.pricing.PriceOfferingUnited" doc:name="United Price Offering"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <logger level="INFO" doc:name="Logger"/>
+        <catch-exception-strategy doc:name="Catch Exception Strategy">
+            <expression-transformer expression="#[new com.mulesoft.training.pricing.PriceOffer(&quot;United&quot;,0)]" doc:name="No price found"/>
+            <json:object-to-json-transformer doc:name="Object to JSON"/>
+        </catch-exception-strategy>
     </flow>
 </mule>

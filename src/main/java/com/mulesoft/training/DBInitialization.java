@@ -14,6 +14,7 @@ public class DBInitialization implements InitializingBean {
 	private static Logger logger = LoggerFactory.getLogger(DBInitialization.class);
 	
 	public void afterPropertiesSet() throws Exception {
+						
 		String dbURL = "jdbc:derby:memory:muleEmbeddedDB;create=true";
 		Connection conn = null;
 		try {

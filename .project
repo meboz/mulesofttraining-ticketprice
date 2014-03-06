@@ -14,8 +14,8 @@
     </buildCommand>
   </buildSpec>
   <natures>
-    <nature>org.mule.tooling.maven.mavenNature</nature>
     <nature>org.mule.tooling.core.muleNature</nature>
     <nature>org.eclipse.jdt.core.javanature</nature>
+    <nature>org.mule.tooling.maven.mavenNature</nature>
   </natures>
 </projectDescription>
